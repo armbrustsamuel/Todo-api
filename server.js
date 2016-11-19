@@ -26,7 +26,7 @@ app.get('/todos', function(req,res){
 
 // GET /todos/:id
 app.get('/todos/:id', function(req,res){
-	var todoId = req.params.id;
+	var todoId = parseInt(req.params.id);
 	var matchedTodo;
 	// Itarate of todos array. Find the match
 
@@ -37,11 +37,11 @@ app.get('/todos/:id', function(req,res){
 	})
 
 	if(matchedTodo){
-		req.json(matchedTodo);
+		res.json(matchedTodo);
 	} else {
-		req.status(404).send();
+		res.status(404).send();
 	}
-	
+
 });
 
 app.listen(PORT, function(){
