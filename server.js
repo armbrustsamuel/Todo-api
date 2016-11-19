@@ -26,6 +26,24 @@ app.get('/todos', function(req,res){
 
 // GET /todos/:id
 app.get('/todos/:id', function(req,res){
+	var todoId = req.params.id;
+	var matchedTodo;
+	// Itarate of todos array. Find the match
+
+	// req.status(404).send();
+
+	for(todo in todos){
+		if(todo.id === todoId){
+			matchedTodo = todo;
+		}
+	}
+
+	if(matchedTodo.id != null){
+		req.json(matchedTodo);
+	} else {
+		req.status(404).send();
+	}
+
 	res.send('Asking for todo with id of ' + req.params.id )
 });
 
