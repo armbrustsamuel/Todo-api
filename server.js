@@ -30,13 +30,11 @@ app.get('/todos/:id', function(req,res){
 	var matchedTodo;
 	// Itarate of todos array. Find the match
 
-	// req.status(404).send();
-
-	for(todo in todos){
+	todos.forEach(function(todo) {
 		if(todo.id === todoId){
 			matchedTodo = todo;
 		}
-	}
+	})
 
 	if(matchedTodo.id != null){
 		req.json(matchedTodo);
