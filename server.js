@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var _ = require('underscore');
 
 var app = express();
 var PORT = process.env.PORT || 3001;
@@ -20,14 +21,16 @@ app.get('/todos', function(req,res){
 // GET /todos/:id
 app.get('/todos/:id', function(req,res){
 	var todoId = parseInt(req.params.id);
-	var matchedTodo;
+
+	var matchedTodo = _.findWhere(todos, {id: todoId});
+	
 	// Itarate of todos array. Find the match
 
-	todos.forEach(function(todo) {
-		if(todo.id === todoId){
-			matchedTodo = todo;
-		}
-	})
+	// todos.forEach(function(todo) {
+	// 	if(todo.id === todoId){
+	// 		matchedTodo = todo;
+	// 	}
+	// })
 
 	if(matchedTodo){
 		res.json(matchedTodo);
@@ -39,17 +42,17 @@ app.get('/todos/:id', function(req,res){
 
 // POST /todos
 app.post('/todos', function(req,res) {
-	var body = req.body;
-	var matchedTodo;
+	var body = _.pick(req.body, 'completed', 'description');
 
-	body.id = todoNextId;
+	if(!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0) {
+		return res.status(400).send();
+	}
 
-	todoNextId+=1;
+	// set body.description to be trimmed value
+	body.description = body.description.trim();
+	body.id = todoNextId++;
 
 	todos.push(body);
-
-	// add id field
-	// push body into array
 
 	res.json(body);
 });
